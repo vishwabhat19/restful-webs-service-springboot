@@ -3,6 +3,7 @@ package com.rest.webservice.restfulwebservice.controller;
 import java.net.URI;
 import java.util.List;
 
+import com.rest.webservice.restfulwebservice.exceptions.UserNotFoundException;
 import com.rest.webservice.restfulwebservice.model.User;
 import com.rest.webservice.restfulwebservice.service.UserDAOService;
 
@@ -36,6 +37,10 @@ public class RestfulWebServiceController {
 
     @GetMapping("/users/{id}")
     public User getUser(@PathVariable int id) {
-        return service.findUser(id);
+        User user = service.findUser(id);
+        if(null == user) {
+            throw new UserNotFoundException("id - "+id);
+        }
+        return user;
     }
 }
