@@ -9,6 +9,7 @@ import com.rest.webservice.restfulwebservice.service.UserDAOService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,4 +44,13 @@ public class RestfulWebServiceController {
         }
         return user;
     }
+
+    @DeleteMapping("/users/{id}")
+    public void deleteUser(@PathVariable int id) {
+        User user = service.deleteById(id);
+        if(null == user) {
+            throw new UserNotFoundException("id - "+id);
+        }
+    }
+
 }
