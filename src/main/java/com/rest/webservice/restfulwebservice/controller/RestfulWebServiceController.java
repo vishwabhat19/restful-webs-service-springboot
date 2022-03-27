@@ -3,6 +3,8 @@ package com.rest.webservice.restfulwebservice.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.rest.webservice.restfulwebservice.exceptions.UserNotFoundException;
 import com.rest.webservice.restfulwebservice.model.User;
 import com.rest.webservice.restfulwebservice.service.UserDAOService;
@@ -29,7 +31,7 @@ public class RestfulWebServiceController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User createdUser = service.save(user);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdUser.getId()).toUri();
