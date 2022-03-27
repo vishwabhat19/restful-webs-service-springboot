@@ -10,6 +10,8 @@ import com.rest.webservice.restfulwebservice.model.User;
 import com.rest.webservice.restfulwebservice.service.UserDAOService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
 @RestController
 public class RestfulWebServiceController {
@@ -39,12 +42,18 @@ public class RestfulWebServiceController {
     }
 
     @GetMapping("/users/{id}")
-    public User getUser(@PathVariable int id) {
+    public EntityModel<User> getUser(@PathVariable int id) {
         User user = service.findUser(id);
         if(null == user) {
             throw new UserNotFoundException("id - "+id);
         }
-        return user;
+
+        EntityModel<User> entityModel = EntityModel.of(user);
+
+        WebMvcLinkBuilder mvcLinkBuilder = linkTo(methodOn(RestfulWebServiceController.class).getUsers());
+
+        entityModel.add(mvcLinkBuilder.withRel("all-users"));
+        return entityModel;
     }
 
     @DeleteMapping("/users/{id}")

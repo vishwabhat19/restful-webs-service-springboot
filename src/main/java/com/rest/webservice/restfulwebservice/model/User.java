@@ -12,7 +12,7 @@ public class User {
     @Size(min = 2, message = "Name should have atleast two characters!")
     private String name;
 
-    @Past
+    @Past(message = "Birthdate should be a past date!")
     private Date birthDate;
 
     public User() {
